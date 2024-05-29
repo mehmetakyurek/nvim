@@ -1,5 +1,6 @@
 local function keymaps()
 	local builtin = require("telescope.builtin")
+	local actions = require("telescope.actions")
 	local function map(key, func, opt)
 		vim.keymap.set("n", key, func, opt)
 	end
@@ -10,7 +11,8 @@ local function keymaps()
 	map("<leader>sh", builtin.help_tags, { desc = "help_tags" })
 	map("<leader>sk", builtin.keymaps, { desc = "keymaps" })
 	map("<leader>dt", builtin.treesitter, { desc = "treesitter" })
-	map("<leader>tp", builtin.pickers, { desc = "pickers" })
+	map("<leader>tp", builtin.fd, { desc = "pickers" })
+	map("<leader>zr", builtin.reloader, { desc = "reloader" })
 	-- lsp
 	map("gr", builtin.lsp_references, { desc = "lsp_references" })
 	map("<leader>ds", builtin.lsp_document_symbols, { desc = "document_symbols" })

@@ -1,9 +1,8 @@
 return {
-
   {
     'ray-x/lsp_signature.nvim',
     event = 'VeryLazy',
-
+    enabled = false,
     config = function()
       require('lsp_signature').setup({
         bind = true,
@@ -13,7 +12,7 @@ return {
         floating_window_off_x = function()
           return vim.api.nvim_win_get_cursor(0)[2]
         end,
-        floating_window_off_y = 1,
+        floating_window_off_y = -1,
         handler_opts = {
           border = "rounded"
         },
