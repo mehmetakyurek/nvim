@@ -1,6 +1,9 @@
 return {
-    'pcolladosoto/tinygo.nvim',
-    config = function()
-      require('tinygo').setup()
-    end,
-  }
+  'pcolladosoto/tinygo.nvim',
+  enabled = function()
+    return vim.fn.executable('tinygo') == 1
+  end,
+  config = function()
+    require('tinygo').setup()
+  end,
+}

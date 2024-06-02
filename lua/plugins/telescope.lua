@@ -4,7 +4,7 @@ local function keymaps()
 	local function map(key, func, opt)
 		vim.keymap.set("n", key, func, opt)
 	end
-	map("<leader>sf", builtin.find_files, { desc = "find_files" })
+	map("<leader>sf", "<cmd>Telescope find_files hidden=true no_ignore=true<cr>", { desc = "find_files" })
 	map("<leader>sr", builtin.resume, { desc = "resume" })
 	map("<leader>sg", builtin.live_grep, { desc = "live_grep" })
 	map("<leader>sb", builtin.buffers, { desc = "buffers" })
@@ -21,13 +21,21 @@ local function keymaps()
 	map("gi", builtin.lsp_implementations, { desc = "lsp_implementations" })
 	map("gd", builtin.lsp_definitions, { desc = "lsp_definitions" })
 	map("<leader>gtd", builtin.lsp_type_definitions, { desc = "type_definitions" })
-	map("<leader>/", builtin.current_buffer_fuzzy_find, { desc = "current_buffer_fuzzy_find" })
+	map("<leader>mp", builtin.man_pages, { desc = "man_pages" })
+	-- map("<leader>/", builtin.current_buffer_fuzzy_find, { desc = "current_buffer_fuzzy_find" })
 	map("<leader>s/", function()
 		builtin.live_grep({
 			grep_open_files = true,
 			prompt_title = "Live Grep in Open Files",
 		})
 	end, { desc = "grep_open_files " })
+	vim.keymap.set('n', '<leader>/', function()
+		-- You can pass additional configuration to telescope to change theme, layout, etc.
+		builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+			winblend = 10,
+			previewer = false,
+		})
+	end, { desc = '[/] Fuzzily search in current buffer' })
 end
 
 return {
@@ -68,7 +76,7 @@ return {
 			vim.api.nvim_set_keymap(
 				"n",
 				"<space>fb",
-				":Telescope file_browser path=%:p:h select_buffer=true<CR>",
+				":Telescope file_browser hidden=true path=%:p:h select_buffer=true<CR>",
 				{ noremap = true }
 			)
 		end,
