@@ -2,6 +2,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 	group = vim.api.nvim_create_augroup("lspa", {}),
 	callback = function(e)
 		local opts = { buffer = e.buf }
+		vim.api.nvim_set_keymap("i", "jj", "<Esc>", { noremap = false })
 		-- vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
 		vim.keymap.set("n", "<leader>h", function() vim.lsp.buf.hover() end, opts)
 		vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
