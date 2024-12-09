@@ -11,8 +11,6 @@ return {
 				ensure_installed = { "lua_ls", "rust_analyzer", "gopls" },
 			})
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities = vim.tbl_deep_extend("force", capabilities,
-				require("cmp_nvim_lsp").default_capabilities())
 			local servers = {
 				lua_ls = {
 					-- cmd = {...},
@@ -69,23 +67,47 @@ return {
 			"hrsh7th/cmp-cmdline",
 			"saadparwaiz1/cmp_luasnip",
 			"L3MON4D3/LuaSnip",
+			'onsails/lspkind.nvim',
 		},
 		config = function()
-			require("cmp").setup()
 			vim.opt.completeopt = { "menu", "menuone", "noselect" }
+			local lspconfig = require("lspconfig")
 			local luasnip = require("luasnip")
-			-- local servers = {
-			-- 	"lua_ls",
-			-- 	"tsserver",
-			-- }
+			local servers = {
+				"lua_ls",
+				"ts_ls",
+			}
 			-- for _, lsp in ipairs(servers) do
+			-- 	local capabilities = require('cmp_nvim_lsp').default_capabilities()
 			-- 	lspconfig[lsp].setup({
 			-- 		-- on_attach = my_custom_on_attach,
 			-- 		capabilities = capabilities,
 			-- 	})
 			-- end
 			local cmp = require("cmp")
+			local lspkind = require('lspkind')
 			cmp.setup({
+				preselect = cmp.PreselectMode.None,
+				formatting = {
+					format = lspkind.cmp_format({
+						mode = 'symbol-text', -- show only symbol annotations
+						maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+						-- can also be a function to dynamically calculate max width such as
+						-- maxwidth = function() return math.floor(0.45 * vim.o.columns) end,
+						ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+						show_labelDetails = true, -- show labelDetails in menu. Disabled by default
+						-- The function below will be called before any actual modifications from lspkind
+						-- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+						before = function(entry, vim_item)
+							return vim_item
+						end
+					})
+				},
+
+				window = {
+					-- completion = cmp.config.window.bordered(),
+					-- documentation = cmp.Config.window.bordered(),
+				},
 				snippet = {
 					expand = function(args)
 						luasnip.lsp_expand(args.body)
@@ -94,6 +116,8 @@ return {
 				sources = {
 					{ name = "nvim_lsp" },
 					{ name = "buffer" },
+					{ name = 'luasnip' },
+					{ name = 'treesitter' }
 				},
 				mapping = cmp.mapping.preset.insert({
 					["<C-u>"] = cmp.mapping.scroll_docs(-4), -- Up
@@ -103,6 +127,7 @@ return {
 					["<C-Space>"] = cmp.mapping.complete(),
 					["<CR>"] = cmp.mapping.confirm({
 						behavior = cmp.ConfirmBehavior.Replace,
+
 						select = true,
 					}),
 				}),

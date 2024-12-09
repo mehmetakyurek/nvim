@@ -11,16 +11,15 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 
 vim.opt.rtp:prepend(lazypath)
-
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
 require("after.map")
 
 require("settings")
 
 require("lazy").setup("plugins", {
 	change_detection = {
+		enabled = true,
 		notify = false,
 	},
-})
-require("lazy").setup({
-	{ import = "plugins" },
 })
