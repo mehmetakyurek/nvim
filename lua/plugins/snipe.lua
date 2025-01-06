@@ -3,7 +3,7 @@ return {
 	keys = {
 		{ "<leader>sp", function() require("snipe").open_buffer_menu() end, desc = "Open Snipe buffer menu" }
 	},
-	opts = {},
+	opts = { ui = { position = "cursor" } },
 	init = function()
 		local snipe = require("snipe")
 		snipe.ui_select_menu = require("snipe.menu"):new { position = "center" }
